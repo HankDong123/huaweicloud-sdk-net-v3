@@ -80,22 +80,22 @@ namespace HuaweiCloud.SDK.Core
         {
         }
 
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
             HttpResponseMessage response = null;
             for (var i = 0; i < MaxRetries; i++)
             {
-                response = await base.SendAsync(request, cancellationToken);
+                response = base.SendAsync(request, cancellationToken).GetAwaiter().GetResult();
 
                 // todo Retry depends on policy
                 if (response.IsSuccessStatusCode)
                 {
-                    return response;
+                    return Task.FromResult(response);
                 }
             }
 
-            return response;
+            return Task.FromResult(response);
         }
     }
 }

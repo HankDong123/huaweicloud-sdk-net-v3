@@ -136,10 +136,10 @@ namespace HuaweiCloud.SDK.Core
             return contentType;
         }
 
-        public async Task<HttpResponseMessage> DoHttpRequest(HttpRequestMessage request)
+        public HttpResponseMessage DoHttpRequest(HttpRequestMessage request)
         {
             _httpHandler?.ProcessRequest(request, this._logger);
-            var response = await _myHttpClient.SendAsync(request);
+            var response = _myHttpClient.SendAsync(request).GetAwaiter().GetResult();
             _httpHandler?.ProcessResponse(response, this._logger);
             return response;
         }

@@ -34,7 +34,7 @@ namespace HuaweiCloud.SDK.Core
     {
         public class ClientBuilder<T> where T : Client
         {
-            private string[] CredentialType { get; } = {nameof(BasicCredentials)};
+            private string[] CredentialType { get; } = { nameof(BasicCredentials) };
 
             public ClientBuilder()
             {
@@ -125,7 +125,7 @@ namespace HuaweiCloud.SDK.Core
                 client.WithCredential(this._credentials)
                     .WithEndPoint(this._endPoint);
 
-                return (T) client;
+                return (T)client;
             }
         }
 
@@ -181,7 +181,8 @@ namespace HuaweiCloud.SDK.Core
             var message = this._sdkHttpClient.InitHttpRequest(request, _httpConfig.IgnoreBodyForGetRequest);
             try
             {
-                var response = await this._sdkHttpClient.DoHttpRequest(message);
+                //var response = await this._sdkHttpClient.DoHttpRequest(message);
+                var response = _sdkHttpClient.DoHttpRequest(message);
                 return GetResult(response);
             }
             catch (AggregateException aggregateException)
@@ -209,7 +210,7 @@ namespace HuaweiCloud.SDK.Core
             var message = this._sdkHttpClient.InitHttpRequest(request, _httpConfig.IgnoreBodyForGetRequest);
             try
             {
-                var response = this._sdkHttpClient.DoHttpRequest(message).Result;
+                var response = this._sdkHttpClient.DoHttpRequest(message);
                 return GetResult(response);
             }
             catch (AggregateException aggregateException)
@@ -220,7 +221,7 @@ namespace HuaweiCloud.SDK.Core
 
         private HttpResponseMessage GetResult(HttpResponseMessage responseMessage)
         {
-            if ((int) responseMessage.StatusCode < 400)
+            if ((int)responseMessage.StatusCode < 400)
             {
                 return responseMessage;
             }

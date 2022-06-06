@@ -77,30 +77,25 @@ namespace HuaweiCloud.SDK.Core.Auth
 
         public override Task<HttpRequest> SignAuthRequest(HttpRequest request)
         {
-            Task<HttpRequest> httpRequestTask = Task<HttpRequest>.Factory.StartNew(() =>
+            if (DomainId != null)
             {
-                if (DomainId != null)
-                {
-                    request.Headers.Add("X-Domain-Id", DomainId);
-                }
+                request.Headers.Add("X-Domain-Id", DomainId);
+            }
 
-                if (SecurityToken != null)
-                {
-                    request.Headers.Add("X-Security-Token", SecurityToken);
-                }
+            if (SecurityToken != null)
+            {
+                request.Headers.Add("X-Security-Token", SecurityToken);
+            }
 
-                if (!IsNullOrEmpty(request.ContentType) && !request.ContentType.Contains("application/json"))
-                {
-                    request.Headers.Add("X-Sdk-Content-Sha256", "UNSIGNED-PAYLOAD");
-                }
+            if (!IsNullOrEmpty(request.ContentType) && !request.ContentType.Contains("application/json"))
+            {
+                request.Headers.Add("X-Sdk-Content-Sha256", "UNSIGNED-PAYLOAD");
+            }
 
-                var signer = new Signer {Key = Ak, Secret = Sk};
-                signer.Sign(request);
+            var signer = new Signer { Key = Ak, Secret = Sk };
+            signer.Sign(request);
 
-                return request;
-            });
-
-            return httpRequestTask;
+            return Task.FromResult(request);
         }
 
         public override Credentials ProcessAuthParams(SdkHttpClient client, string regionId)
